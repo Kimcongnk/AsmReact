@@ -2,12 +2,47 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
 
 const StatusUpdate = () => {
+  const [posts, setPosts] = useState([]);
   const [statusText, setStatusText] = useState('');
   const [images, setImages] = useState([]);
+  const addPost = async () => {
+    
+const comments = [
+  {
+    id: 1,
+    comment: "Cảm ơn bạn đã chia sẻ bài viết này!",
+    authorId: 1,
+    postId: 1,
+  },
+  {
+    id: 2,
+    comment: "Bài viết rất hay, mình rất thích!",
+    authorId: 2,
+    postId: 1,
+  },
+];
 
-  const handleTextChange = (text) => {
-    setStatusText(text);
+    const post = {
+      status: statusText,
+      comment: comments,
+    };
+  
+ const response = await fetch(
+  "https://6526a0fd917d673fd76cabc2.mockapi.io/user",
+  {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(post),
+    
+
+  }
+);
+
   };
+ 
 
   const handleImageSelect = () => {
 
@@ -15,19 +50,20 @@ const StatusUpdate = () => {
 
   const handlePostStatus = () => {
 
-    setStatusText('');
-    setImages([]);
+  
+   
   };
 
   return (
-    <ScrollView style={styles.container}>
+  
+  <ScrollView style={styles.container}>
       <View style={styles.statusInput}>
         <TextInput
           style={styles.statusTextInput}
           placeholder="What's on your mind?"
           value={statusText}
-          onChangeText={handleTextChange}
-          multiline
+          onChangeText={(text) => setStatusText(text)}
+         
         />
       </View>
       {images.length > 0 && (
@@ -41,7 +77,7 @@ const StatusUpdate = () => {
         <TouchableOpacity onPress={handleImageSelect} style={styles.addImageButton}>
           <Text>Add Photo</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handlePostStatus} style={styles.postButton}>
+        <TouchableOpacity onPress={addPost} style={styles.postButton}>
           <Text>Post</Text>
         </TouchableOpacity>
       </View>

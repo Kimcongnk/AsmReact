@@ -1,14 +1,49 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 
-const CommentDialog = ({ visible, onClose, comments, onCommentSubmit }) => {
+const CommentDialog = ({ visible, onClose, comments, coonCommentSubmit }) => {
   const [newComment, setNewComment] = useState('');
+  const newComment1 = {
+    comment: "newCosssmentText",
+    authorId: 3, // Replace with the actual author ID
+   
+  };
+  const addPost = async () => {
+    // Tạo một đối tượng bài posts mới
+    // Thêm dữ liệu có sẵn vào array comment
+const comments = [
+  {
+    id: 1,
+    comment: "Cảm ơn bạn đã chia sẻ bài viết này!",
+    authorId: 1,
+    postId: 1,
+  },
+  {
+    id: 2,
+    comment: "Bài viết rất hay, mình rất thích!",
+    authorId: 2,
+    postId: 1,
+  },
+];
 
-  const handleCommentSubmit = () => {
-    if (newComment.trim() !== '') {
-      onCommentSubmit(newComment);
-      setNewComment('');
-    }
+    const post = {
+    
+      comment: comments,
+    };
+  
+ const response = await fetch(`https://6526a0fd917d673fd76cabc2.mockapi.io/user`, {
+
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newComment1),
+    
+
+  }
+);
+
   };
 
   return (
@@ -22,14 +57,14 @@ const CommentDialog = ({ visible, onClose, comments, onCommentSubmit }) => {
           <Text style={styles.dialogTitle}>Comments</Text>
 
           <FlatList
-            data={comments}
+           data={comments}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <View style={styles.commentContainer}>
-                <Image source={{ uri: item.avatar }} style={styles.commentAvatar} />
+                {/* <Image source={{  }} style={styles.commentAvatar} /> */}
                 <View style={styles.commentContent}>
-                  <Text style={styles.commentUsername}>{item.username}</Text>
-                  <Text style={styles.commentText}>{item.text}</Text>
+                <Text style={styles.commentUsername}>{item.authorId}</Text>
+                  <Text style={styles.commentText}>{item.comment}</Text>
                 </View>
               </View>
             )}
@@ -42,7 +77,7 @@ const CommentDialog = ({ visible, onClose, comments, onCommentSubmit }) => {
               value={newComment}
               onChangeText={setNewComment}
             />
-            <TouchableOpacity onPress={handleCommentSubmit}>
+            <TouchableOpacity onPress={addPost}>
               <Text style={styles.commentButton}>Post</Text>
             </TouchableOpacity>
           </View>

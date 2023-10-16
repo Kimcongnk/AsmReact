@@ -1,50 +1,78 @@
-import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
 
 export function RegisterScreen() {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [email, setEmail] = React.useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
 
-  const handleRegistration = () => {
-    // Thực hiện logic đăng ký của bạn tại đây, ví dụ: gửi dữ liệu đến máy chủ
-    // Bạn có thể sử dụng các trạng thái 'tên người dùng', 'mật khẩu' và 'email' để thu thập đầu vào của người dùng
+  const handleRegistration = async () => {
+    // Tạo dữ liệu người dùng
+    const user = {
+      username: username,
+      password: password,
+     
+    };
+    if (!username || !password || !passwordConfirmation) {
+      setError("Vui lòng điền đầy đủ thông tin.");
+      return;
+    }
+
+    if (password !== password2) {
+      alert("Mật khẩu không khớp!");
+      return;
+    }
+
+    const response = await fetch("https://6526a0fd917d673fd76cabc2.mockapi.io/User", {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 201) {
+      alert("Đăng ký thành công!");
+    } else {
+      alert("Đã xảy ra lỗi!");
+    }
   };
 
-  return ( 
-    <ImageBackground source={require('./backrouw.webp')} style={styles.background}>
-    <View style={styles.container}>
-      <Text style={{ fontSize: 40 }}>Đăng kí</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
+  return (
+    <ImageBackground source={require("./backrouw.webp")} style={styles.background}>
+      <View style={styles.container}>
+        <Text style={{ fontSize: 40 }}>Đăng kí</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          value={username}
+          onChangeText={setUsername}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={email}
-        onChangeText={setEmail}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+          value={password2}
+          onChangeText={setPassword2}
+        />
 
-      <TouchableOpacity
-        style={styles.buttonDn}
-
-      >
-        <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }}>Đăng nhập</Text>
-      </TouchableOpacity>
-      <Text>Bạn đã có tài khoản</Text>
-    </View>
+        <TouchableOpacity
+          style={styles.buttonDn}
+          onPress={handleRegistration}
+        >
+          <Text style={{ color: "white", fontSize: 16, textAlign: "center" }}>Đăng nhập</Text>
+        </TouchableOpacity>
+        <Text>Bạn đã có tài khoản</Text>
+      </View>
     </ImageBackground>
   );
 }
@@ -52,19 +80,19 @@ export function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent', 
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "transparent",
+    alignItems: "center",
+    justifyContent: "center",
   },
   background: {
     flex: 1,
-    width: '100%',
-    height: '100%', 
+    width: "100%",
+    height: "100%",
   },
   input: {
     width: 379,
     height: 48,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     marginTop: 20,
     paddingHorizontal: 10,
@@ -73,10 +101,11 @@ const styles = StyleSheet.create({
   },
   buttonDn: {
     width: 379,
-    backgroundColor: '#1877F2',
+    backgroundColor: "#1877F2",
     borderRadius: 10,
     padding: 10,
     marginTop: 20,
   },
 });
+
 export default RegisterScreen;
